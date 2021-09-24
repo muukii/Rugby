@@ -17,9 +17,32 @@ struct CacheIntegration {
         let originalDirs = ["PODS_CONFIGURATION_BUILD_DIR", "BUILT_PRODUCTS_DIR"].joined(separator: "|")
         let suffixPods = buildedTargets.map { $0.escapeForRegex() }.joined(separator: "|")
         let fileRegex = [#".*-resources\.sh"#, #".*\.xcconfig"#, #".*-frameworks\.sh"#].joined(separator: "|")
-        try FilePatcher().replace(#"\$\{(\#(originalDirs))\}(?=\/(\#(suffixPods))("|\s|\/))"#,
+        try FilePatcher().replaceDryRun(#"\$\{(\#(originalDirs))\}(?=\/(\#(suffixPods))("|\s|\/))"#,
                                   with: cacheFolder,
                                   inFilesByRegEx: "(\(fileRegex))",
                                   folder: supportFilesFolder)
+
+//        do {
+//            try FilePatcher().modify(inFilesByRegEx: #"(.*-resources\.sh)"#, folder: supportFilesFolder, modifier: { _, line in
+//                print(line)
+//                return [line]
+//            })
+//        }
+//
+//        do {
+//            try FilePatcher().modify(inFilesByRegEx: #"(.*\.xcconfig)"#, folder: supportFilesFolder, modifier: { _, line in
+//                print(line)
+//                return [line]
+//            })
+//        }
+//
+//        do {
+//            try FilePatcher().modify(inFilesByRegEx: #"(.*-frameworks\.sh)"#, folder: supportFilesFolder, modifier: { _, line in
+//                print(line)
+//                return [line]
+//            })
+//        }
+
+
     }
 }
